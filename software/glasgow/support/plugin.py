@@ -27,6 +27,10 @@ def _requirements_for_optional_dependencies(distribution, depencencies):
     requirements = map(packaging.requirements.Requirement, distribution.requires)
     selected_requirements = set()
     for dependency in depencencies:
+        import re
+        if isinstance(dependency, re.Match):
+            dependency = dependency.group(0)
+
         for requirement in requirements:
             if requirement.marker and requirement.marker.evaluate({"extra": dependency}):
                 requirement = packaging.requirements.Requirement(str(requirement))
